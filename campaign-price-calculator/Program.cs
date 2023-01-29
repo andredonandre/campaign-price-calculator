@@ -1,22 +1,25 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using CPC.Models;
-Console.WriteLine("Hello, World!");
-//New cart
-Cart mycart = new Cart();
-string[] cartlist = {"7340005404261", "7310532109090" ,"5000112637922" ,"7310865004703"};
-mycart.CartItems = cartlist.Select(c => new Product{EAN = c, Price=60});
-
-//Volume campaign
-VolumeCampaign vc = new VolumeCampaign();
-vc.campaignProduct = new Product {EAN = "5000112637939"};
-vc.Price = 90;
-vc.name = "test";
+//Sample shopping cart
+string[] cartList = { "7310865004703", "7310865004703", "5000112637922", "7310865004703", "7310865004703", "5000112637939" };
+Cart myCart = new Cart() { cartItems = cartList.Select(c => new CartItem { EAN = c }).ToList()};
+//Create Volume campaign
+VolumeCampaign volumeCampaign = new VolumeCampaign() { campaignProduct = new Product { EAN = "7310865004703" }, minimumQuantity = 2, name = "Test Volume Campaign", Price = 30 };
 //Create combo campaign
-ComboCampaign cc = new ComboCampaign();
-string[] combolist = {"5000112637922","5000112637939","7310865004703","7340005404261","7310532109090","7611612222105"};
-cc.campaignItems = list.Select(c => new Product{EAN = c, Price=60});
+string[] comboItems = { "5000112637922","5000112637939","7310865004703","7340005404261","7310532109090","7611612222105"};
+ComboCampaign comboCampaign = new ComboCampaign() { Price = 30 , campaignItems = comboItems.Select(c => new Product { EAN = c }).ToList() };
+
+//Calculate Cart price for each campaign
+var volumePrice = volumeCampaign.CalculatePrice(myCart);
+var comboPrice = comboCampaign.CalculatePrice(myCart);
 
 
-void SeedData(){
-
-}
+//OUTPUT
+Console.WriteLine("/YOUR SHOPPING CART"); 
+Console.WriteLine("EAN         PRICE   |");
+myCart.cartItems.ForEach(i => Console.WriteLine($"{i.EAN}   | {i.Price}"));
+Console.WriteLine("----------------------------");
+Console.WriteLine($"ORIGINAL PRICE: {myCart.CalculatePrice()} SEK");
+Console.WriteLine("----------------------------");
+Console.WriteLine($"Combo Price: {comboPrice} SEK");
+Console.WriteLine($"Volume Price: {volumePrice} SEK");
