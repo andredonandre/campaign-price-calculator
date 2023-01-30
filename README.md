@@ -1,6 +1,6 @@
-Campaign Price Calculator- Terminal
+Campaign Price Calculator- Console
 
-Simple terminal application with functionality to calculate campaign pricing
+Simple Console application with functionality to calculate campaign pricing
 
 #Assumptions made
 
