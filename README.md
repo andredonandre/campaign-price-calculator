@@ -1,3 +1,9 @@
-# Campaign price Calculator
-Assumptions made
-- Only one campaign type can be applied to a cart/basket
+Campaign Price Calculator- Terminal
+
+Simple terminal application with functionality to calculate campaign pricing
+
+#Assumptions made
+
+- A campaign can only be applied to a cart once
+- All products cost 100 SEK
+- Multiple campaign prices cannot be calculated recursively
