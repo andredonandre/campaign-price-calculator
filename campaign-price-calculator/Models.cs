@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.NetworkInformation;
@@ -33,31 +33,43 @@ namespace CPC.Models
             return cart.cartItems.Sum(p => p.Price);
         }
     }
-    public class VolumeCampaign:Campaign {
+   
+ public class VolumeCampaign : Campaign
+    {
         public Product campaignProduct { get; set; } = new Product();
         public int minimumQuantity { get; set; } = 2;
         public int Price { get; set; } = 0;
         //Price calculation for Volume Campaign
         public override int CalculatePrice(Cart cart)
         {
+            //Items in cart which campaign can be applied to
             var units = cart.cartItems.Where(p => p.EAN == campaignProduct.EAN).ToList();
+            //Other Items in the cart that campaign does not apply to
             var otherunits = cart.cartItems.Where(p => p.EAN != campaignProduct.EAN).ToList();
+            //Total Price of Items where campaign is not applicable
             var otherprice = otherunits.Sum(o => o.Price);
+            //Campaign units where campaign won't be applied
             var rem = units.Count % minimumQuantity;
             return ((units.Count / minimumQuantity) * Price) + (rem * campaignProduct.Price) + otherprice;
-         }
+        }
     }
-    public class ComboCampaign: Campaign {
-        public List<Product> campaignItems= new List<Product>();
+    public class ComboCampaign : Campaign
+    {
+        public List<Product> campaignItems = new List<Product>();
         public int Price { get; set; } = 0;
         //Price calculation for Combo Campaign
         public override int CalculatePrice(Cart cart)
         {
-            var campaignUnits = cart.cartItems.Where( u => campaignItems.Any(i => i.EAN == u.EAN)).ToList();
-            var otherunits = cart.cartItems.Where (c => !campaignItems.Any(x => x.EAN == c.EAN)).ToList();
+            //Items in cart which campaign can be applied to
+            var campaignUnits = cart.cartItems.Where(u => campaignItems.Any(i => i.EAN == u.EAN)).ToList();
+            //Other Items in the cart that campaign does not apply to
+            var otherunits = cart.cartItems.Where(c => !campaignItems.Any(x => x.EAN == c.EAN)).ToList();
+            //Total Price of Items where campaign is not applicable
             var otherprice = otherunits.Sum(o => o.Price);
+            //Campaign units where campaign won't be applied
             var rem = campaignUnits.Count % 2;
-            var remprice = campaignUnits.Any()? campaignUnits.Last().Price : 0;
+            //Price for campaign units where campaign wont be applied
+            var remprice = campaignUnits.Any() ? campaignUnits.Last().Price : 0;
             return ((campaignUnits.Count / 2) * Price) + (rem * remprice) + otherprice;
         }
     }
